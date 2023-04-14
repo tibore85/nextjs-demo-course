@@ -1,3 +1,5 @@
+import { MongoClient } from 'mongodb';
+
 import Head from 'next/head';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -58,12 +60,23 @@ function MeetupsPage(props) {
 
 export async function getStaticProps() {
 
-    const resp = await fetch('http://localhost:3000/api/meetups');
-    const data = await resp.json();
+    const client = await MongoClient.connect('mongodb+srv://tibore85:rw7Kqo2F5hTrGkGl@cluster0.qna1i7z.mongodb.net/nextjsdemo?retryWrites=true&w=majority');
+    const db = client.db();
+    const meetupsCollection = db.collection('meetups');
+    const result = await meetupsCollection.find().toArray();
+
+    // const resp = await fetch('http://localhost:3000/api/meetups');
+    // const data = await resp.json();
 
     return {
         props: {
-            meetups: data
+            meetups: result.map( item => ({
+                id: item._id.toString(),
+                title: item.title,
+                address: item.address,
+                description: item.description,
+                image: item.image
+            }))
         },
         revalidate: 1
     };
