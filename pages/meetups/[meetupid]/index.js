@@ -1,7 +1,15 @@
 import Head from "next/head";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 function MeetupItem(props) {
+
+    const _router = useRouter();
+
+    if(_router.isFallback) {
+        return <>Loading...</>
+    }
+
     return (
         <>
         <Head>
@@ -25,15 +33,15 @@ export async function getStaticPaths() {
         fallback: true,
         paths: data.map((item) => ({ params: { meetupid: item.id } }))
         // paths: [
-        //     {
-        //         params: {
-        //             meetupid: "1"
-        //         }
-        //     },{
-        //         params: {
-        //             meetupid: "2"
-        //         }
-        //     }
+            // {
+            //     params: {
+            //         meetupid: "1"
+            //     }
+            // },{
+            //     params: {
+            //         meetupid: "2"
+            //     }
+            // }
         // ]
     }
 }
@@ -43,7 +51,7 @@ export async function getStaticProps(context) {
     const meetupId = context.params.meetupid;
     const req = await fetch(`http://localhost:3000/api/meetups/${meetupId}`);
     const resp = await req.json();
-    // console.log(resp);
+    console.log(resp);
 
     return {
         props: {

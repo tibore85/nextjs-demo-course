@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect, useRef } from "react";
+//import { useEffect, useRef } from "react";
 import NewMeetupForm from "../../../components/meetups/NewMeetupForm";
 
 function NewMeetupPage() {
